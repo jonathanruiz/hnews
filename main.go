@@ -4,11 +4,20 @@ import (
 	"encoding/json"
 	"fmt"
 	"net/http"
+	"strings"
+
+	tea "github.com/charmbracelet/bubbletea"
 )
 
 type Story struct {
 	Title string `json:"title"`
 	URL   string `json:"url"`
+}
+
+type model struct {
+	stories []Story // story from stories
+	err     error   // error from stories
+	cursor  int     // which story our cursor is pointing at
 }
 
 func getTopStories(numStories int) ([]Story, error) {
@@ -58,19 +67,49 @@ func getTopStories(numStories int) ([]Story, error) {
 	return stories, nil
 }
 
-func main() {
-	// Retrieve the top stories.
-	stories, err := getTopStories(3)
+// Init returns the initial command to run.
+func (m model) Init() tea.Cmd {
+	return nil
+}
 
-	// Panic if an error is returned.
-	if err != nil {
-		panic(err)
+// Update handles messages.
+func (m model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
+	switch msg := msg.(type) {
+	case tea.KeyMsg:
+		if msg.String() == "q" {
+			return m, tea.Quit
+		}
 	}
 
-	// Print the title and URL for each story.
-	for _, story := range stories {
-		println(story.Title)
-		println(story.URL)
+	return m, nil
+}
+
+// View renders the model.
+func (m model) View() string {
+	if m.err != nil {
+		return fmt.Sprintf("Error: %v", m.err)
+	}
+
+	if len(m.stories) == 0 {
+		return "No stories available"
+	}
+
+	var lines []string
+	for _, story := range m.stories {
+		lines = append(lines, fmt.Sprintf("- %s (%s)", story.Title, story.URL))
+	}
+
+	return strings.Join(lines, "\n")
+}
+
+// main starts the program.
+func main() {
+	stories, err := getTopStories(10)
+
+	p := tea.NewProgram(model{stories: stories, err: err, cursor: 1})
+
+	if err := p.Start(); err != nil {
+		fmt.Printf("Error: %v", err)
 	}
 
 }
