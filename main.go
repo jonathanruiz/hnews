@@ -79,6 +79,16 @@ func (m model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 		if msg.String() == "q" {
 			return m, tea.Quit
 		}
+		// Show top 5 when refreshing
+		if msg.String() == "r" {
+			stories, err := getTopStories(5)
+			m = model{
+				stories: stories,
+				err:     err,
+				cursor:  1,
+			}
+			return m, nil
+		}
 	}
 
 	return m, nil
