@@ -14,6 +14,8 @@ type Story struct {
 func getTopStories() ([]Story, error) {
 	// Via the Hacker News API, retrieve a list of the top story IDs.
 	resp, err := http.Get("https://hacker-news.firebaseio.com/v0/topstories.json")
+
+	// Return any error if the GET request fails.
 	if err != nil {
 		return nil, err
 	}
@@ -29,32 +31,42 @@ func getTopStories() ([]Story, error) {
 	// For the top 5 stories, retrieve the story and append it to the slice of stories.
 	stories := make([]Story, 0, 5)
 	for _, id := range ids[:5] {
+
+		// Via the Hacker News API, retrieve the story for the given ID.
 		url := fmt.Sprintf("https://hacker-news.firebaseio.com/v0/item/%d.json", id)
+
+		// Retrieve the story through GET request
 		resp, err := http.Get(url)
 		if err != nil {
 			return nil, err
 		}
 		defer resp.Body.Close()
 
+		// Decode the JSON response into a Story.
 		var story Story
 		err = json.NewDecoder(resp.Body).Decode(&story)
 		if err != nil {
 			return nil, err
 		}
 
+		// Append the story to the slice.
 		stories = append(stories, story)
 	}
 
+	// Return the slice of stories.
 	return stories, nil
 }
 
 func main() {
+	// Retrieve the top stories.
 	stories, err := getTopStories()
 
+	// Panic if an error is returned.
 	if err != nil {
 		panic(err)
 	}
 
+	// Print the title and URL for each story.
 	for _, story := range stories {
 		println(story.Title)
 		println(story.URL)
