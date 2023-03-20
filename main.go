@@ -11,7 +11,7 @@ type Story struct {
 	URL   string `json:"url"`
 }
 
-func getTopStories() ([]Story, error) {
+func getTopStories(numStories int) ([]Story, error) {
 	// Via the Hacker News API, retrieve a list of the top story IDs.
 	resp, err := http.Get("https://hacker-news.firebaseio.com/v0/topstories.json")
 
@@ -28,9 +28,10 @@ func getTopStories() ([]Story, error) {
 		return nil, err
 	}
 
-	// For the top 5 stories, retrieve the story and append it to the slice of stories.
-	stories := make([]Story, 0, 5)
-	for _, id := range ids[:5] {
+	// For the top stories, retrieve the story and append it to the slice of stories.
+	// Number of stories is based off of numStories.
+	stories := make([]Story, 0, numStories)
+	for _, id := range ids[:numStories] {
 
 		// Via the Hacker News API, retrieve the story for the given ID.
 		url := fmt.Sprintf("https://hacker-news.firebaseio.com/v0/item/%d.json", id)
@@ -59,7 +60,7 @@ func getTopStories() ([]Story, error) {
 
 func main() {
 	// Retrieve the top stories.
-	stories, err := getTopStories()
+	stories, err := getTopStories(3)
 
 	// Panic if an error is returned.
 	if err != nil {
