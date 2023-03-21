@@ -105,8 +105,8 @@ func (m model) View() string {
 	}
 
 	var lines []string
-	for _, story := range m.stories {
-		lines = append(lines, fmt.Sprintf("- %s (%s)", story.Title, story.URL))
+	for index, story := range m.stories {
+		lines = append(lines, fmt.Sprintf("%d %s (%s)", index+1, story.Title, story.URL))
 	}
 
 	return strings.Join(lines, "\n")
