@@ -116,7 +116,7 @@ func main() {
 
 	p := tea.NewProgram(model{stories: stories, err: err, cursor: 1})
 
-	if err := p.Start(); err != nil {
+	if _, err := p.Run(); err != nil {
 		fmt.Printf("Error: %v", err)
 	}
 
