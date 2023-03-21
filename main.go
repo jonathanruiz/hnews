@@ -75,11 +75,10 @@ func (m model) Init() tea.Cmd {
 func (m model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 	switch msg := msg.(type) {
 	case tea.KeyMsg:
-		if msg.String() == "q" {
+		switch msg.String() {
+		case "q":
 			return m, tea.Quit
-		}
-		// Show top 5 when refreshing
-		if msg.String() == "r" {
+		case "r":
 			stories, err := getTopStories(5)
 			m = model{
 				stories: stories,
@@ -87,6 +86,14 @@ func (m model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 				cursor:  1,
 			}
 			return m, nil
+		case "up", "k":
+			if m.cursor > 1 {
+				m.cursor--
+			}
+		case "down", "j":
+			if m.cursor < len(m.stories) {
+				m.cursor++
+			}
 		}
 	}
 
@@ -103,10 +110,16 @@ func (m model) View() string {
 		return "No stories available"
 	default:
 		for index, story := range m.stories {
-			lines += fmt.Sprintf("%d. %s (%s)\n", index+1, story.Title, story.URL)
+			// Add an asterisk to the currently selected story
+			if index+1 == m.cursor {
+				lines += fmt.Sprintf("> %d. %s (%s)\n", index+1, story.Title, story.URL)
+			} else {
+				lines += fmt.Sprintf("  %d. %s (%s)\n", index+1, story.Title, story.URL)
+			}
 		}
 
 		lines += "\nPress 'q' to quit. Press 'r' to refresh.\n"
+		lines += fmt.Sprintf("Currently selected: %d\n", m.cursor)
 
 		return lines
 	}
