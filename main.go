@@ -96,20 +96,18 @@ func (m model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 
 // View renders the model.
 func (m model) View() string {
-	if m.err != nil {
+	switch {
+	case m.err != nil:
 		return fmt.Sprintf("Error: %v", m.err)
-	}
-
-	if len(m.stories) == 0 {
+	case len(m.stories) == 0:
 		return "No stories available"
+	default:
+		var lines []string
+		for index, story := range m.stories {
+			lines = append(lines, fmt.Sprintf("%d %s (%s)", index+1, story.Title, story.URL))
+		}
+		return strings.Join(lines, "\n")
 	}
-
-	var lines []string
-	for index, story := range m.stories {
-		lines = append(lines, fmt.Sprintf("%d %s (%s)", index+1, story.Title, story.URL))
-	}
-
-	return strings.Join(lines, "\n")
 }
 
 // main starts the program.
