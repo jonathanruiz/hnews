@@ -102,6 +102,11 @@ func (m model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 
 // View renders the model.
 func (m model) View() string {
+	return allStoriesView(m)
+
+}
+
+func allStoriesView(m model) string {
 	lines := "Here are the top stories from Hacker News:\n\n"
 	switch {
 	case m.err != nil:
@@ -123,6 +128,10 @@ func (m model) View() string {
 
 		return lines
 	}
+}
+
+func storyView(story Story) string {
+	return fmt.Sprintf("%s (%s)", story.Title, story.URL)
 }
 
 // main starts the program.
