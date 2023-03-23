@@ -94,6 +94,10 @@ func (m model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 			if m.cursor < len(m.stories) {
 				m.cursor++
 			}
+		case "enter":
+			if m.cursor > 0 && m.cursor <= len(m.stories) {
+				return storyView(m.stories[m.cursor-1]), nil
+			}
 		}
 	}
 
@@ -103,7 +107,6 @@ func (m model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 // View renders the model.
 func (m model) View() string {
 	return allStoriesView(m)
-
 }
 
 func allStoriesView(m model) string {
@@ -130,8 +133,23 @@ func allStoriesView(m model) string {
 	}
 }
 
-func storyView(story Story) string {
-	return fmt.Sprintf("%s (%s)", story.Title, story.URL)
+func (s Story) Init() tea.Cmd {
+	return nil
+}
+
+func (s Story) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
+	return s, nil
+}
+
+func (s Story) View() string {
+	lines := "Here is the story you selected:\n\n"
+	lines += fmt.Sprintf("%s (%s)", s.Title, s.URL)
+
+	return lines
+}
+
+func storyView(story Story) Story {
+	return story
 }
 
 // main starts the program.
