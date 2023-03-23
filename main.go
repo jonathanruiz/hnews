@@ -138,6 +138,14 @@ func (s Story) Init() tea.Cmd {
 }
 
 func (s Story) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
+	switch msg := msg.(type) {
+	case tea.KeyMsg:
+		switch msg.String() {
+		case "q":
+			return s, tea.Quit
+		}
+	}
+
 	return s, nil
 }
 
