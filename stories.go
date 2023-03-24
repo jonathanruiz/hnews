@@ -34,6 +34,7 @@ func getTopStories(numStories int) ([]Story, error) {
 	// For the top stories, retrieve the story and append it to the slice of stories.
 	// Number of stories is based off of numStories.
 	stories := make([]Story, 0, numStories)
+
 	for _, id := range ids[:numStories] {
 
 		// Via the Hacker News API, retrieve the story for the given ID.
