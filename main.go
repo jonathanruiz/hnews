@@ -151,7 +151,8 @@ func (s Story) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 
 func (s Story) View() string {
 	lines := "Here is the story you selected:\n\n"
-	lines += fmt.Sprintf("%s (%s)", s.Title, s.URL)
+	lines += fmt.Sprintf("%s (%s)\n", s.Title, s.URL)
+	lines += "\nPress 'q' to quit. Press 'r' to refresh."
 
 	return lines
 }
