@@ -10,6 +10,7 @@ type Story struct {
 	Id    int    `json:"id"`
 	Title string `json:"title"`
 	URL   string `json:"url"`
+	Score int    `json:"score"`
 }
 
 func (s Story) Init() tea.Cmd {
@@ -30,8 +31,9 @@ func (s Story) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 }
 
 func (s Story) View() string {
-	lines := fmt.Sprintf("Here is the story you selected: ID# %s\n\n", fmt.Sprint(s.Id))
+	lines := fmt.Sprintf("Here is the story you selected: ID# %d\n\n", s.Id)
 	lines += fmt.Sprintf("%s (%s)\n", s.Title, s.URL)
+	lines += fmt.Sprintf("Score: %d\n", s.Score)
 	lines += "\nPress 'q' to quit. Press 'r' to refresh."
 
 	return lines
