@@ -20,7 +20,8 @@ func (s Story) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 	case tea.KeyMsg:
 		switch msg.String() {
 		case "q":
-			return s, tea.Quit
+			stories, err := getTopStories(DEFAULT_NUM_STORIES)
+			return model{stories: stories, err: err, cursor: 1}, tea.Cmd(nil)
 		}
 	}
 

@@ -74,7 +74,7 @@ func (m model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 		case "q":
 			return m, tea.Quit
 		case "r":
-			stories, err := getTopStories(5)
+			stories, err := getTopStories(DEFAULT_NUM_STORIES)
 			m = model{
 				stories: stories,
 				err:     err,
