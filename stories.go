@@ -116,9 +116,9 @@ func allStoriesView(m model) string {
 		for index, story := range m.stories {
 			// Add an asterisk to the currently selected story
 			if index+1 == m.cursor {
-				lines += fmt.Sprintf("> %d. %s (%s)\n", index+1, story.Title, story.URL)
+				lines += fmt.Sprintf("> %d. %s\n", index+1, story.Title)
 			} else {
-				lines += fmt.Sprintf("  %d. %s (%s)\n", index+1, story.Title, story.URL)
+				lines += fmt.Sprintf("  %d. %s\n", index+1, story.Title)
 			}
 		}
 
