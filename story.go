@@ -32,7 +32,7 @@ func (s Story) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 }
 
 func (s Story) View() string {
-	lines := fmt.Sprintf("Here is the story you selected: ID# %d\n\n", s.Id)
+	lines := fmt.Sprintf("Here is the story you selected: ID# %d (https://news.ycombinator.com/item?id=%d)\n\n", s.Id, s.Id)
 	lines += fmt.Sprintf("%s (%s)\n", s.Title, s.URL)
 	lines += fmt.Sprintf("Score: %d\n", s.Score)
 	lines += fmt.Sprintf("Comments: %d\n", len(s.Comments))
