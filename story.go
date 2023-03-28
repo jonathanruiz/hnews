@@ -7,10 +7,11 @@ import (
 )
 
 type Story struct {
-	Id    int    `json:"id"`
-	Title string `json:"title"`
-	URL   string `json:"url"`
-	Score int    `json:"score"`
+	Id       int    `json:"id"`
+	Title    string `json:"title"`
+	URL      string `json:"url"`
+	Score    int    `json:"score"`
+	Comments []int  `json:"kids"`
 }
 
 func (s Story) Init() tea.Cmd {
@@ -34,6 +35,12 @@ func (s Story) View() string {
 	lines := fmt.Sprintf("Here is the story you selected: ID# %d\n\n", s.Id)
 	lines += fmt.Sprintf("%s (%s)\n", s.Title, s.URL)
 	lines += fmt.Sprintf("Score: %d\n", s.Score)
+	lines += fmt.Sprintf("Comments: %d\n", len(s.Comments))
+
+	for _, comment := range s.Comments {
+		lines += fmt.Sprintf("  %s\n\n", getComments(comment).Text)
+	}
+
 	lines += "\nPress 'q' to quit. Press 'r' to refresh."
 
 	return lines
