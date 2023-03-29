@@ -4,6 +4,7 @@ import (
 	"fmt"
 
 	tea "github.com/charmbracelet/bubbletea"
+	"github.com/muesli/reflow/wordwrap"
 )
 
 type Story struct {
@@ -38,7 +39,9 @@ func (s Story) View() string {
 	lines += fmt.Sprintf("Comments: %d\n", len(s.Comments))
 
 	for _, comment := range s.Comments {
-		lines += fmt.Sprintf("  %s\n\n", getComments(comment).Text)
+		commentText := getComments(comment).Text
+		wrappedText := wordwrap.String(commentText, 80)
+		lines += fmt.Sprintf("  %s\n\n", wrappedText)
 	}
 
 	lines += "\nPress 'q' to quit. Press 'r' to refresh."
